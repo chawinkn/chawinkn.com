@@ -1,85 +1,201 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import BackLink from "../components/BackLink.astro";
 import rawMusicData from "../data/music.json";
 
 interface Song {
-	name: string;
-	artist: string;
-	album?: string;
-	favoriteLyrics: string[];
-	url: string;
-	image: string;
+  name: string;
+  artist: string;
+  album?: string;
+  favoriteLyrics: string[];
+  url: string;
 }
 
-const songs = rawMusicData as Song[];
-const eligibleSongs = songs.filter((s) => s.image && s.favoriteLyrics?.length > 0);
-
-const bangkokDay = Math.floor((Date.now() + 7 * 36e5) / 864e5);
-const dailySongIndex = eligibleSongs.length > 0 ? bangkokDay % eligibleSongs.length : 0;
-const defaultSong = eligibleSongs[dailySongIndex] || songs[0];
+const songs = [...(rawMusicData as Song[])].sort((a, b) => a.name.localeCompare(b.name));
+const defaultSong = songs[0];
 const defaultLyric = defaultSong?.favoriteLyrics?.[0] || "";
+const defaultVideoId = defaultSong?.url ? new URL(defaultSong.url).searchParams.get("v") : "";
 ---
 
 <Layout
-	title="chawinkn - music"
-	description="Music and favorite lyrics collected by Chawin Chaisongkram (Kanoon)."
+  title="chawinkn - music"
+  description="Music and favorite lyrics collected by Chawin Chaisongkram (Kanoon)."
 >
-	<section class="my-10 space-y-8">
-		<div>
-			<BackLink />
-			<h2 class="text-xl md:text-2xl font-semibold tracking-tight">
-				Music / เพลง
-			</h2>
-		</div>
+  <section class="my-10 space-y-8">
+    {defaultSong && defaultVideoId && (
+      <figure class="space-y-3">
+        <a
+          id="today-song-link"
+          href={defaultSong.url}
+          target="_blank"
+          rel="noreferrer"
+          class="group block w-full aspect-video overflow-hidden bg-surface-muted cursor-pointer"
+          aria-label={`Listen to ${defaultSong.name} on YouTube`}
+        >
+          <img
+            id="today-song-img"
+            src={`https://i3.ytimg.com/vi/${defaultVideoId}/maxresdefault.jpg`}
+            alt={defaultSong.name}
+            class="w-full h-full object-cover group-hover:brightness-75"
+            referrerpolicy="no-referrer"
+            loading="eager"
+          />
+        </a>
 
-		{defaultSong?.image && (
-			<figure class="space-y-3">
-				<div class="w-full aspect-[16/9] sm:aspect-[2/1] overflow-hidden bg-surface-muted">
-					<img
-						id="random-cover-img"
-						src={defaultSong.image}
-						alt={defaultLyric}
-						class="w-full h-full object-cover"
-						referrerpolicy="no-referrer"
-						loading="eager"
-					/>
-				</div>
+        <figcaption class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pt-1">
+          <p
+            id="random-song-name"
+            class="font-serif italic font-semibold text-xl md:text-2xl text-foreground text-left leading-normal"
+          >
+            {defaultSong.name}
+          </p>
+          <blockquote
+            id="random-lyric-text"
+            class="font-serif italic font-normal text-xl md:text-2xl text-foreground text-right whitespace-pre-line max-w-prose leading-normal sm:ml-auto"
+          >
+            {defaultLyric ? `“${defaultLyric}”` : ""}
+          </blockquote>
+        </figcaption>
+      </figure>
+    )}
 
-				{defaultLyric && (
-					<figcaption class="flex justify-end pt-1">
-						<blockquote
-							id="random-lyric-text"
-							class="font-serif italic font-normal text-xl md:text-2xl text-foreground text-right whitespace-pre-line max-w-prose leading-relaxed"
-						>
-							“{defaultLyric}”
-						</blockquote>
-					</figcaption>
-				)}
-			</figure>
-		)}
-	</section>
+    <section aria-labelledby="music-list-heading" class="pt-2">
+      <div class="flex flex-wrap items-baseline justify-between gap-3">
+        <h3 id="music-list-heading" class="font-mono text-sm text-foreground">
+          music list
+        </h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <input
+            id="music-search"
+            type="search"
+            placeholder="search..."
+            autocomplete="off"
+            class="bg-transparent font-mono text-xs text-foreground placeholder:text-muted outline-none border-b border-border focus:border-foreground py-0.5"
+          />
+          <label for="music-sort" class="font-mono text-xs text-foreground">
+            sort by:
+            <select
+              id="music-sort"
+              class="bg-transparent font-mono text-xs text-foreground underline underline-offset-4 outline-none"
+            >
+              <option value="name">name</option>
+              <option value="artist">artist</option>
+              <option value="album">album</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="mt-3 overflow-x-auto border-y border-border">
+        <table class="w-full min-w-[34rem] border-collapse font-mono text-sm">
+          <thead class="text-xs text-foreground">
+            <tr class="border-b border-border">
+              <th scope="col" class="py-3 pr-6 text-left font-medium">
+                Name
+              </th>
+              <th scope="col" class="px-6 py-3 text-left font-medium">
+                Artist
+              </th>
+              <th scope="col" class="pl-6 py-3 text-left font-medium">
+                Album
+              </th>
+            </tr>
+          </thead>
+          <tbody id="music-list-body">
+            {songs.map((song) => (
+              <tr
+                class="border-b border-border/70 last:border-0"
+                data-name={song.name}
+                data-artist={song.artist}
+                data-album={song.album || ""}
+              >
+                <td class="py-4 pr-6 font-medium">
+                  <a
+                    href={song.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="text-foreground underline underline-offset-4 hover:opacity-70"
+                  >
+                    {song.name}
+                  </a>
+                </td>
+                <td class="px-6 py-4 text-foreground">{song.artist}</td>
+                <td class="pl-6 py-4 text-foreground">{song.album || "—"}</td>
+              </tr>
+            ))}
+            <tr id="music-empty" class="border-b border-border/70 last:border-0" hidden>
+              <td colspan="3" class="py-8 text-center text-muted">
+                no songs found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
 
-	<script is:inline define:vars={{ eligibleSongs }}>
-		if (eligibleSongs && eligibleSongs.length > 0) {
-			const bangkokDay = Math.floor((Date.now() + 7 * 36e5) / 864e5);
-			const dailySong = eligibleSongs[bangkokDay % eligibleSongs.length];
+  <script is:inline define:vars={{ songs }}>
+    if (songs.length > 0) {
+      const randomSong = songs[Math.floor(Math.random() * songs.length)];
 
-			if (dailySong && dailySong.favoriteLyrics && dailySong.favoriteLyrics.length > 0) {
-				const lyrics = dailySong.favoriteLyrics;
-				const randomLyric = lyrics[Math.floor(Math.random() * lyrics.length)];
+      const videoId = new URL(randomSong.url).searchParams.get("v");
+      const songLinkEl = document.getElementById("today-song-link");
+      const songImgEl = document.getElementById("today-song-img");
+      const lyricEl = document.getElementById("random-lyric-text");
+      const songNameEl = document.getElementById("random-song-name");
+      const lyrics = randomSong.favoriteLyrics || [];
+      const randomLyric = lyrics[Math.floor(Math.random() * lyrics.length)];
 
-				const imgEl = document.getElementById("random-cover-img");
-				const lyricEl = document.getElementById("random-lyric-text");
+      if (songLinkEl && videoId) {
+        songLinkEl.href = randomSong.url;
+        songLinkEl.setAttribute("aria-label", `Listen to ${randomSong.name} on YouTube`);
+        if (songImgEl) {
+          songImgEl.src = `https://i3.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+          songImgEl.alt = randomSong.name;
+        }
+      }
 
-				if (imgEl && dailySong.image) {
-					imgEl.src = dailySong.image;
-					imgEl.alt = randomLyric;
-				}
-				if (lyricEl && randomLyric) {
-					lyricEl.textContent = `“${randomLyric}”`;
-				}
-			}
-		}
-	</script>
+      if (songNameEl) {
+        songNameEl.textContent = randomSong.name;
+      }
+
+      if (lyricEl) {
+        lyricEl.textContent = randomLyric ? `“${randomLyric}”` : "";
+      }
+
+      const musicSortEl = document.getElementById("music-sort");
+      const musicSearchEl = document.getElementById("music-search");
+      const musicListBodyEl = document.getElementById("music-list-body");
+      const emptyRowEl = document.getElementById("music-empty");
+
+      if (musicListBodyEl) {
+        const rows = [...musicListBodyEl.querySelectorAll("tr:not(#music-empty)")];
+
+        const filterRows = () => {
+          const q = musicSearchEl ? musicSearchEl.value.trim().toLowerCase() : "";
+          let visible = 0;
+          rows.forEach((row) => {
+            const text =
+              `${row.dataset.name || ""} ${row.dataset.artist || ""} ${row.dataset.album || ""}`.toLowerCase();
+            const match = !q || text.includes(q);
+            row.hidden = !match;
+            if (match) visible++;
+          });
+          if (emptyRowEl) {
+            emptyRowEl.hidden = visible > 0;
+          }
+        };
+
+        if (musicSearchEl) {
+          musicSearchEl.addEventListener("input", filterRows);
+        }
+
+        if (musicSortEl) {
+          musicSortEl.addEventListener("change", () => {
+            const sortKey = musicSortEl.value;
+            rows.sort((a, b) => (a.dataset[sortKey] || "").localeCompare(b.dataset[sortKey] || ""));
+            musicListBodyEl.prepend(...rows);
+          });
+        }
+      }
+    }
+  </script>
 </Layout>

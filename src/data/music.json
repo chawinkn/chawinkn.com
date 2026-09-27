@@ -4,10 +4,11 @@
     "artist": "Frank Ocean",
     "album": "Blonde",
     "favoriteLyrics": [
-      "Sometimes you'll miss it\nAnd the sound will make you cry\nAnd some nights you're dancing\nWith tears in your eyes"
+      "I came to visit, 'cause you see me like a UFO\nThat's like never 'Cause I made you use your self-control\nAnd you made me lose my self-control, my self-control",
+      "Sometimes you'll miss it\nAnd the sound will make you cry\nAnd some nights you're dancing\nWith tears in your eyes",
+      "Keep a place for me, for me\nI'll sleep between y'all, it's nothing\nIt's nothing, it's nothing\nKeep a place for me, for me"
     ],
-    "url": "https://www.youtube.com/watch?v=OxMLCkWm6Dc",
-    "image": "https://i3.ytimg.com/vi/OxMLCkWm6Dc/maxresdefault.jpg"
+    "url": "https://www.youtube.com/watch?v=OxMLCkWm6Dc"
   },
   {
     "name": "Dear April",
@@ -16,9 +17,74 @@
     "favoriteLyrics": [
       "If you could take two strangers\nLeanin' them left and right\nAt a certain place and time",
       "You made me new\nYou took me through\nYou woke me up (woke me up)",
-      "And what we had can't be the same now (now)\nBut you will make something\nIt'll take you through\nIt'll wake you up again"
+      "And what we had can't be the same now (now)\nBut you will make something\nIt'll take you through\nIt'll wake you up again",
+      "The only face in the crowd that I knew\nDear April, Are you watchin' him?\nAre you watchin' him dance?"
     ],
-    "url": "https://www.youtube.com/watch?v=pvU4b4N1-QU",
-    "image": "https://i3.ytimg.com/vi/pvU4b4N1-QU/maxresdefault.jpg"
+    "url": "https://www.youtube.com/watch?v=pvU4b4N1-QU"
+  },
+  {
+    "name": "All I Need",
+    "artist": "Radiohead",
+    "album": "In Rainbows",
+    "favoriteLyrics": [
+      "You are all I need\nYou're all I need\nI'm in the middle of your picture\nLying in the reeds",
+      "It's all wrong\nIt's all wrong\nIt's all right\nIt's all right"
+    ],
+    "url": "https://www.youtube.com/watch?v=slH3r1sHSZQ"
+  },
+  {
+    "name": "About You",
+    "artist": "The 1975",
+    "album": "Being Funny In A Foreign Language",
+    "favoriteLyrics": [
+      "Do you think I have forgotten?\nDo you think I have forgotten?\nDo you think I have forgotten about you?",
+      "Wait, and pretend\nHold on, and hope that we'll find our way back in the end",
+      "And I miss you on a train, I miss you in the morning\nI never know what to think about\nI think about you"
+    ],
+    "url": "https://www.youtube.com/watch?v=tGv7CUutzqU"
+  },
+  {
+    "name": "La La Lost You",
+    "artist": "NIKI",
+    "album": "Head in the Clouds II",
+    "favoriteLyrics": [
+      "Hope New York holds you\nHope it holds you like I do\nWhile my demons stay faithful\nIn the city of angels",
+      "If I'm honest, I'd call, but I'm trying to let go\nAnd I hope you're happy, livin' life in taxis\nBut you'll always have me, you'll always have me"
+    ],
+    "url": "https://www.youtube.com/watch?v=ErmgY5GX_wI"
+  },
+  {
+    "name": "Malibu Nights",
+    "artist": "LANY",
+    "album": "Lany",
+    "favoriteLyrics": [
+      "I drive circles under street lights\nNothing seems to clear my mind\nI can't forget, Get this out my head",
+      "Phone is quiet, walls are bare\nI drink myself to sleep, who cares?\nNo one even has to know\nI'm dealing with it on my own",
+      "I got way too much time to be this hurt\nSomebody help, it's getting worse\nWhat do you do with a broken heart?"
+    ],
+    "url": "https://www.youtube.com/watch?v=KdcPzDNHX74"
+  },
+  {
+    "name": "Solo",
+    "artist": "Frank Ocean",
+    "album": "Blonde",
+    "favoriteLyrics": [
+      "We too loud in public, them police turned down the function\nNow we outside, and the timing's perfect\nForgot to tell you, gotta tell you how much I vibe with you\nAnd we don't gotta be solo",
+      "It's Hell on Earth, and the city's on fire\nInhale, in Hell, there's Heaven\nThere's a bull and a matador dueling in the sky\nInhale, in Hell, there's Heaven",
+      "I'm skippin' showers and switchin' socks, sleepin' good and long\nBones feelin' dense as fuck, wish a nigga would cross\nAnd catch a solo, on time",
+      "Fuck 'round, be cuttin' you\nThink we were better off solo"
+    ],
+    "url": "https://www.youtube.com/watch?v=X_SEwgDl02E"
+  },
+  {
+    "name": "Nobody But You",
+    "artist": "Sonder ft Jorja Smith",
+    "album": "Nobody But You",
+    "favoriteLyrics": [
+      "Don't think you cared about me (oh, girl, I care about you)\nBut you don't care 'bout nobody (nobody but you)",
+      "And I know you probably thinkin' I ain't worth shit\nBut I never want anyone to bring you any harm",
+      "I wish I had the time to run to you, not ruin your life\nI'd never wrong you twice, I wanna make things right\nAnd maybe you'll take me, Hope you don't hate me"
+    ],
+    "url": "https://www.youtube.com/watch?v=V7Sy2AywSkw"
   }
 ]
