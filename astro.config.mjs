@@ -1,14 +1,14 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-import react from '@astrojs/react';
-import tailwindcss from '@tailwindcss/vite';
+import react from "@astrojs/react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: 'https://chawinkn.github.io',
+  site: "https://chawinkn.com",
   integrations: [react()],
 
   vite: {
-    plugins: [tailwindcss()]
-  }
+    plugins: [tailwindcss()],
+  },
 });

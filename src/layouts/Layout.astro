@@ -4,70 +4,73 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
 interface Props {
-	title?: string;
-	description?: string;
+  title?: string;
+  description?: string;
 }
 
-const {
-	title = "chawinkn",
-	description = "Personal website of Chawin Chaisongkram (Kanoon).",
-} = Astro.props;
+const { title = "chawinkn", description = "Personal website of Chawin Chaisongkram (Kanoon)." } =
+  Astro.props;
 
-const siteUrl = Astro.site ?? new URL("https://chawinkn.github.io");
+const siteUrl = Astro.site ?? new URL("https://chawinkn.com");
 const canonicalURL = new URL(Astro.url.pathname, siteUrl);
 
 const jsonLd = {
-	"@context": "https://schema.org",
-	"@type": "Person",
-	"name": "Chawin Chaisongkram",
-	"alternateName": ["Kanoon", "chawinkn"],
-	"url": siteUrl.toString(),
-	"sameAs": ["https://github.com/chawinkn"],
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Chawin Chaisongkram",
+  alternateName: ["Kanoon", "chawinkn"],
+  url: siteUrl.toString(),
+  sameAs: ["https://github.com/chawinkn"],
 };
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
+<html lang="en" style="background-color: #F2F0EF;">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#F2F0EF" />
+    <style is:inline>
+      html,
+      body {
+        background-color: #f2f0ef;
+      }
+    </style>
+    <link rel="icon" href="/icon.ico" />
+    <meta name="generator" content={Astro.generator} />
 
-		<title>{title}</title>
-		<meta name="description" content={description} />
-		<meta name="author" content="Chawin Chaisongkram (Kanoon)" />
-		<meta name="keywords" content="Chawin Chaisongkram, Kanoon, chawinkn" />
-		<meta name="robots" content="index, follow" />
-		<meta name="google-site-verification" content="eoeJQCJP5jWFPGgqBbyjQY-5T6WUYYLlXUk7zG3hKOg" />
-		<link rel="canonical" href={canonicalURL} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Chawin Chaisongkram (Kanoon)" />
+    <meta name="keywords" content="Chawin Chaisongkram, Kanoon, chawinkn" />
+    <meta name="robots" content="index, follow" />
+    <meta name="google-site-verification" content="eoeJQCJP5jWFPGgqBbyjQY-5T6WUYYLlXUk7zG3hKOg" />
+    <link rel="canonical" href={canonicalURL} />
 
-		<meta property="og:site_name" content="Chawin Chaisongkram (Kanoon)" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:url" content={canonicalURL} />
-		<meta property="og:type" content="website" />
-		<meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Chawin Chaisongkram (Kanoon)" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
 
-		<meta name="twitter:card" content="summary" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
 
-		<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
-
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Serif+Thai:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,300..700;1,300..700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap"
-			rel="stylesheet"
-		/>
-	</head>
-	<body class="bg-background text-foreground antialiased">
-		<main class="container-content py-12 md:py-16">
-			<Header />
-			<slot />
-			<Footer />
-		</main>
-	</body>
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Serif+Thai:wght@300;400;500;600;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,300..700;1,300..700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-background text-foreground antialiased">
+    <main class="container-content pt-6 md:pt-8 pb-12 md:pb-16">
+      <Header />
+      <slot />
+      <Footer />
+    </main>
+  </body>
 </html>

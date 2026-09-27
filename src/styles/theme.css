@@ -1,8 +1,8 @@
 :root {
-  --background: #ffffff;
+  --background: #f2f0ef;
   --foreground: #09090b;
 
-  --surface: #ffffff;
+  --surface: #f2f0ef;
   --surface-muted: #f4f4f5;
   --surface-subtle: #f9f9fa;
 
@@ -15,7 +15,7 @@
   --border-subtle: #f1f1f3;
 
   --primary: #09090b;
-  --primary-foreground: #ffffff;
+  --primary-foreground: #f2f0ef;
 
   --secondary: #f4f4f5;
   --secondary-foreground: #18181b;
@@ -25,10 +25,14 @@
   --code-foreground: #09090b;
 
   --selection-background: #09090b;
-  --selection-foreground: #ffffff;
+  --selection-foreground: #f2f0ef;
 
-  --font-serif: "Newsreader", "IBM Plex Serif Thai", "Noto Serif Thai", Georgia, Cambria, "Times New Roman", "Thonburi", serif;
-  --font-sans: "Inter", "IBM Plex Sans Thai", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-serif:
+    "Newsreader", "IBM Plex Serif Thai", "Noto Serif Thai", Georgia, Cambria, "Times New Roman",
+    "Thonburi", serif;
+  --font-sans:
+    "Inter", "IBM Plex Sans Thai", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
   --font-thai: "IBM Plex Serif Thai", "Noto Serif Thai", "IBM Plex Sans Thai", "Thonburi", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
@@ -152,4 +156,3 @@ h3 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
-
