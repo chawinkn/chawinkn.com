@@ -1,26 +1,103 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PictureFigure from "../components/PictureFigure.astro";
+
+const accessKey = import.meta.env.UNSPLASH_ACCESS_KEY;
+
+const photos = accessKey
+  ? await fetch(
+      "https://api.unsplash.com/photos/random?count=24&query=city,travel,architecture&orientation=landscape",
+      { headers: { Authorization: `Client-ID ${accessKey}` } }
+    )
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        const list = Array.isArray(data) ? data : [];
+        return list.map((item) => ({
+          img: item.urls?.regular ?? "",
+          url: item.links?.html ?? "",
+          title: item.location?.name ?? "",
+          alt: item.alt_description ?? "",
+          shortDescription: item.short_description ?? "",
+          author: item.user?.name ? `photo by ${item.user.name}` : "",
+        }));
+      })
+      .catch((e) => {
+        console.error("Failed to fetch daily photos from Unsplash:", e);
+        return [];
+      })
+  : [];
+
+const initialPhoto = photos[new Date().getHours() % photos.length];
 ---
 
-<Layout title="Chawin Chaisongkram" description="Personal website of Chawin Chaisongkram (Kanoon).">
-  <section class="my-10 text-base md:text-lg leading-relaxed space-y-6">
-    <p class="text-foreground">Hi! I'm Kanoon. - in progress</p>
+<Layout title="Chawin Chaisongkram">
+  <section class="mt-8 mb-6 space-y-8">
+    <div class="space-y-6 text-base md:text-lg leading-relaxed">
+      <p class="text-foreground">Hi! I'm Kanoon. - in progress</p>
 
-    <div class="flex flex-col gap-2 font-mono text-sm">
-      <a
-        href="/cv.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-foreground underline underline-offset-4 w-fit hover:opacity-70"
-      >
-        -&gt; curriculum vitae
-      </a>
-      <a href="/music" class="text-foreground underline underline-offset-4 w-fit hover:opacity-70">
-        -&gt; music
-      </a>
-      <a href="/blogs" class="text-foreground underline underline-offset-4 w-fit hover:opacity-70">
-        -&gt; blogs
-      </a>
+      <div class="flex flex-col gap-2 font-mono text-sm">
+        <a
+          href="/cv.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-foreground underline underline-offset-4 w-fit hover:opacity-70"
+        >
+          -&gt; curriculum vitae
+        </a>
+        <a
+          href="/music"
+          class="text-foreground underline underline-offset-4 w-fit hover:opacity-70"
+        >
+          -&gt; music
+        </a>
+        <a
+          href="/blogs"
+          class="text-foreground underline underline-offset-4 w-fit hover:opacity-70"
+        >
+          -&gt; blogs
+        </a>
+      </div>
     </div>
+
+    {initialPhoto && (
+      <PictureFigure
+        linkId="daily-photo-link"
+        imgId="daily-photo-img"
+        titleId="daily-photo-title"
+        subtitleId="daily-photo-subtitle"
+        quoteId="daily-photo-quote"
+        url={initialPhoto.url}
+        img={initialPhoto.img}
+        alt={initialPhoto.alt}
+        title={initialPhoto.title}
+        subtitle={initialPhoto.author}
+        quote={initialPhoto.shortDescription}
+      />
+    )}
   </section>
+
+  <script is:inline define:vars={{ photos }}>
+    if (photos.length) {
+      const currentPhoto = photos[new Date().getHours() % photos.length];
+      if (currentPhoto) {
+        const linkEl = document.getElementById("daily-photo-link");
+        const imgEl = document.getElementById("daily-photo-img");
+        const titleEl = document.getElementById("daily-photo-title");
+        const subtitleEl = document.getElementById("daily-photo-subtitle");
+        const quoteEl = document.getElementById("daily-photo-quote");
+
+        if (linkEl && currentPhoto.url) linkEl.href = currentPhoto.url;
+        if (imgEl && currentPhoto.img) {
+          imgEl.src = currentPhoto.img;
+          imgEl.alt = currentPhoto.alt || currentPhoto.title || "";
+        }
+        if (titleEl) titleEl.textContent = currentPhoto.title || "";
+        if (subtitleEl) subtitleEl.textContent = currentPhoto.author || "";
+        if (quoteEl)
+          quoteEl.textContent = currentPhoto.shortDescription
+            ? `“${currentPhoto.shortDescription}”`
+            : "";
+      }
+    }
+  </script>
 </Layout>

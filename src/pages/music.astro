@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PictureFigure from "../components/PictureFigure.astro";
 import rawMusicData from "../data/music.json";
 
 interface Song {
@@ -18,44 +19,21 @@ const defaultVideoId = defaultSong?.url ? new URL(defaultSong.url).searchParams.
 
 <Layout
   title="music"
-  description="Music and favorite lyrics collected by Chawin Chaisongkram (Kanoon)."
+  description="Curated playlist of favorite songs, tracks, and memorable lyrics collected and enjoyed by Chawin Chaisongkram (Kanoon)."
 >
   <section class="my-10 space-y-8">
     {defaultSong && defaultVideoId && (
-      <figure class="space-y-3">
-        <a
-          id="today-song-link"
-          href={defaultSong.url}
-          target="_blank"
-          rel="noreferrer"
-          class="group block w-full aspect-video overflow-hidden bg-surface-muted cursor-pointer"
-          aria-label={`Listen to ${defaultSong.name} on YouTube`}
-        >
-          <img
-            id="today-song-img"
-            src={`https://i3.ytimg.com/vi/${defaultVideoId}/maxresdefault.jpg`}
-            alt={defaultSong.name}
-            class="w-full h-full object-cover group-hover:brightness-75"
-            referrerpolicy="no-referrer"
-            loading="eager"
-          />
-        </a>
-
-        <figcaption class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pt-1">
-          <p
-            id="random-song-name"
-            class="font-serif italic font-semibold text-xl md:text-2xl text-foreground text-left leading-normal"
-          >
-            {defaultSong.name}
-          </p>
-          <blockquote
-            id="random-lyric-text"
-            class="font-serif italic font-normal text-xl md:text-2xl text-foreground text-right whitespace-pre-line max-w-prose leading-normal sm:ml-auto"
-          >
-            {defaultLyric ? `“${defaultLyric}”` : ""}
-          </blockquote>
-        </figcaption>
-      </figure>
+      <PictureFigure
+        linkId="today-song-link"
+        imgId="today-song-img"
+        titleId="random-song-name"
+        quoteId="random-lyric-text"
+        url={defaultSong.url}
+        img={`https://i3.ytimg.com/vi/${defaultVideoId}/maxresdefault.jpg`}
+        alt={defaultSong.name}
+        title={defaultSong.name}
+        quote={defaultLyric}
+      />
     )}
 
     <section aria-labelledby="music-list-heading" class="pt-2">

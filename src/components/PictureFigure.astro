@@ -1,0 +1,77 @@
+---
+interface Props {
+  img: string;
+  url: string;
+  alt?: string;
+  title?: string;
+  subtitle?: string;
+  quote?: string;
+  imgId?: string;
+  linkId?: string;
+  titleId?: string;
+  subtitleId?: string;
+  quoteId?: string;
+}
+
+const {
+  img,
+  url,
+  alt = "",
+  title,
+  subtitle,
+  quote,
+  imgId,
+  linkId,
+  titleId,
+  subtitleId,
+  quoteId,
+} = Astro.props;
+---
+
+<figure class="space-y-3">
+  <a
+    id={linkId}
+    href={url}
+    target="_blank"
+    rel="noreferrer"
+    class="group block w-full aspect-video overflow-hidden bg-surface-muted cursor-pointer"
+    aria-label={alt || title}
+  >
+    <img
+      id={imgId}
+      src={img}
+      alt={alt || title}
+      class="w-full h-full object-cover group-hover:brightness-75"
+      referrerpolicy="no-referrer"
+      loading="eager"
+    />
+  </a>
+
+  {(title || quote || subtitle || titleId || subtitleId || quoteId) && (
+    <figcaption class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pt-1">
+      <div>
+        {(title || titleId) && (
+          <p
+            id={titleId}
+            class="font-serif italic font-semibold text-xl md:text-2xl text-foreground text-left leading-normal"
+          >
+            {title}
+          </p>
+        )}
+        {(subtitle || subtitleId) && (
+          <p id={subtitleId} class="font-mono text-xs text-muted mt-0.5">
+            {subtitle}
+          </p>
+        )}
+      </div>
+      {(quote || quoteId) && (
+        <blockquote
+          id={quoteId}
+          class="font-serif italic font-normal text-xl md:text-2xl text-foreground text-right whitespace-pre-line max-w-prose leading-normal sm:ml-auto"
+        >
+          {quote ? `“${quote}”` : ""}
+        </blockquote>
+      )}
+    </figcaption>
+  )}
+</figure>
