@@ -16,8 +16,8 @@ const photos = accessKey
           img: item.urls?.regular ?? "",
           url: item.links?.html ?? "",
           title: item.location?.name ?? "",
-          alt: item.alt_description ?? "",
-          shortDescription: item.short_description ?? "",
+          alt: item.alt_description ?? item.description ?? "",
+          shortDescription: item.short_description ?? item.description ?? "",
           author: item.user?.name ? `photo by ${item.user.name}` : "",
         }));
       })
