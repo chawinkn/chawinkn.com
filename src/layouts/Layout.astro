@@ -11,20 +11,16 @@ interface Props {
 }
 
 const {
-  title = "chawinkn",
+  title = "Chawin Chaisongkram",
   description = "Personal website of Chawin Chaisongkram (Kanoon).",
-  image = "/icon.ico",
+  image = "/favicon.ico",
   type = "website",
 } = Astro.props;
 
 const siteUrl = Astro.site ?? new URL("https://chawinkn.com");
 const canonicalURL = new URL(Astro.url.pathname, siteUrl);
-const pageTitle =
-  title === "chawinkn"
-    ? "Chawin Chaisongkram (Kanoon) | chawinkn"
-    : title.endsWith("chawinkn")
-      ? title
-      : `${title} | chawinkn`;
+
+const pageTitle = Astro.url.pathname === "/" ? "Chawin Chaisongkram" : `Kanoon | ${title}`;
 const ogImage = new URL(image, siteUrl).toString();
 
 const jsonLd = {
@@ -62,7 +58,7 @@ const jsonLd = {
         background-color: #f2f0ef;
       }
     </style>
-    <link rel="icon" href="/icon.ico" />
+    <link rel="icon" href="/favicon.ico" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
 
