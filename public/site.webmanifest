@@ -1,0 +1,26 @@
+{
+  "name": "Chawin Chaisongkram",
+  "short_name": "chawinkn",
+  "description": "Chawin Chaisongkram (Kanoon) Computer Engineering Student",
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#F2F0EF",
+  "background_color": "#F2F0EF",
+  "display": "standalone",
+  "start_url": "/"
+}
