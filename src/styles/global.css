@@ -1,2 +1,12 @@
 @import "tailwindcss";
 @import "./theme.css";
+
+@layer base {
+  a[href],
+  button:not(:disabled),
+  summary,
+  select,
+  label[for] {
+    cursor: pointer;
+  }
+}
