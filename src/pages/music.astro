@@ -126,6 +126,10 @@ const defaultVideoId = defaultSong?.url ? new URL(defaultSong.url).searchParams.
         songLinkEl.href = randomSong.url;
         songLinkEl.setAttribute("aria-label", `Listen to ${randomSong.name} on YouTube`);
         if (songImgEl) {
+          songImgEl.onerror = () => {
+            songImgEl.onerror = null;
+            songImgEl.src = `https://i3.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+          };
           songImgEl.src = `https://i3.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
           songImgEl.alt = randomSong.name;
         }
