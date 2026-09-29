@@ -1,46 +1,71 @@
-# Astro Starter Kit: Basics
+# chawinkn.com
 
-```sh
-bun create astro@latest -- --template basics
-```
+Personal site of Chawin Chaisongkram (Kanoon), live at [chawinkn.com](https://chawinkn.com).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Built with [Astro](https://astro.build), React, and Tailwind CSS 4. Deployed to GitHub Pages.
 
-## 🚀 Project Structure
+## Pages
 
-Inside of your Astro project, you'll see the following folders and files:
+| Route    | Source                  | Content                          |
+| :------- | :---------------------- | :------------------------------- |
+| `/`      | `src/pages/index.astro` | Intro and weekly Unsplash photos |
+| `/music` | `src/pages/music.astro` | Favorite songs and lyrics        |
+| `/blogs` | `src/pages/blogs.astro` | Writing (none yet)               |
+
+## Project Structure
 
 ```text
 /
-├── public/
-│   └── favicon.svg
+├── public/               static files, CV, favicons, music-add.html
 ├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+│   ├── components/       shared Astro components
+│   ├── data/music.json   song list for /music
+│   ├── layouts/          Layout.astro
+│   ├── pages/            routes
+│   └── styles/           global.css, theme.css
+└── .github/workflows/    Pages deploy
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Commands
 
-## 🧞 Commands
+Run from the project root. Requires Node >= 22.12 and [Bun](https://bun.sh).
 
-All commands are run from the root of the project, from a terminal:
+| Command                | Action                               |
+| :--------------------- | :----------------------------------- |
+| `bun install`          | Install dependencies                 |
+| `bun dev`              | Start dev server at `localhost:4321` |
+| `bun run build`        | Build production site to `./dist/`   |
+| `bun preview`          | Preview build locally                |
+| `bun run format`       | Format with Prettier                 |
+| `bun run format:check` | Check formatting                     |
+| `bun astro check`      | Type-check                           |
 
-| Command               | Action                                           |
-| :-------------------- | :----------------------------------------------- |
-| `bun install`         | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
+Husky runs Prettier on staged files before each commit.
 
-## 👀 Want to learn more?
+## Environment
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Variable              | Purpose                                                              |
+| :-------------------- | :------------------------------------------------------------------- |
+| `UNSPLASH_ACCESS_KEY` | Fetches weekly photos on `/`. Optional, section is empty without it. |
+
+Set it in `.env` locally and as a repository secret for CI.
+
+## Adding a song
+
+Open `public/music-add.html` (served at `/music-add.html`, `noindex`) to pick lyrics, then paste the result into `src/data/music.json`:
+
+```json
+{
+  "name": "Self Control",
+  "artist": "Frank Ocean",
+  "album": "Blonde",
+  "favoriteLyrics": ["..."],
+  "url": "https://www.youtube.com/watch?v=OxMLCkWm6Dc"
+}
+```
+
+`album` is optional.
+
+## Deployment
+
+`.github/workflows/astro.yml` builds with Bun and deploys to GitHub Pages on push to `main`, on manual dispatch, and daily at 00:10 Bangkok time so the weekly photos stay fresh.

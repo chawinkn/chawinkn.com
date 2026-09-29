@@ -555,8 +555,7 @@
           const res = await fetch(`https://lrclib.net/api/search?q=${encodeURIComponent(q)}`, {
             signal: searchCtl.signal,
             headers: {
-              "Lrclib-Client":
-                "chawinkn-music-add (https://github.com/chawinkn/chawinkn.github.io)",
+              "Lrclib-Client": "chawinkn-music-add (https://github.com/chawinkn/chawinkn.com)",
             },
           });
           if (res.status === 429) {
