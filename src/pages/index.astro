@@ -4,14 +4,16 @@ import PictureFigure from "../components/PictureFigure.astro";
 
 const accessKey = import.meta.env.UNSPLASH_ACCESS_KEY;
 
+const week = Math.floor((Date.now() + 7 * 36e5 - 4 * 864e5) / (7 * 864e5));
+
 const photos = accessKey
   ? await fetch(
-      "https://api.unsplash.com/photos/random?count=24&query=city,travel,architecture&orientation=landscape",
+      `https://api.unsplash.com/search/photos?per_page=21&page=${(week % 400) + 1}&query=city,travel,architecture&orientation=landscape`,
       { headers: { Authorization: `Client-ID ${accessKey}` } }
     )
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        const list = Array.isArray(data) ? data : [];
+        const list: any[] = data?.results ?? [];
         return list.map((item) => ({
           img: item.urls?.regular ?? "",
           url: item.links?.html ?? "",
@@ -22,12 +24,12 @@ const photos = accessKey
         }));
       })
       .catch((e) => {
-        console.error("Failed to fetch daily photos from Unsplash:", e);
+        console.error("Failed to fetch weekly photos from Unsplash:", e);
         return [];
       })
   : [];
 
-const initialPhoto = photos[new Date().getHours() % photos.length];
+const initialPhoto = photos[0];
 ---
 
 <Layout title="Chawin Chaisongkram">
@@ -78,7 +80,9 @@ const initialPhoto = photos[new Date().getHours() % photos.length];
 
   <script is:inline define:vars={{ photos }}>
     if (photos.length) {
-      const currentPhoto = photos[new Date().getHours() % photos.length];
+      const now = new Date(Date.now() + 7 * 36e5);
+      const slot = ((now.getUTCDay() + 6) % 7) * 3 + Math.floor(now.getUTCHours() / 8);
+      const currentPhoto = photos[slot % photos.length];
       if (currentPhoto) {
         const linkEl = document.getElementById("daily-photo-link");
         const imgEl = document.getElementById("daily-photo-img");
