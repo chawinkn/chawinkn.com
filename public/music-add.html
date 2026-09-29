@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>music add</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300..700;1,300..700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --font-serif: "Newsreader", "IBM Plex Serif Thai", Georgia, Cambria, serif;
+        --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        --color-background: #f2f0ef;
+        --color-foreground: #09090b;
+        --color-surface-muted: #f4f4f5;
+        --color-muted: #71717a;
+        --color-border: #e4e4e7;
+      }
+      html,
+      body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        font-family: var(--font-serif);
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+      @layer base {
+        a[href],
+        button:not(:disabled),
+        summary {
+          cursor: pointer;
+        }
+      }
+      ::selection {
+        background-color: #09090b;
+        color: #f2f0ef;
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="mx-auto max-w-7xl px-6 py-8 font-mono text-xs lg:grid lg:grid-cols-[16rem_1fr] lg:gap-10"
+    >
+      <aside class="space-y-6 pb-8 lg:sticky lg:top-8 lg:self-start lg:pb-0">
+        <h1 class="text-sm">music add</h1>
+
+        <section class="space-y-2">
+          <div class="flex items-baseline justify-between">
+            <h2 class="text-muted">songs (<span id="song-count">0</span>)</h2>
+            <button
+              type="button"
+              id="new-song"
+              class="underline underline-offset-4 hover:opacity-70"
+            >
+              + new
+            </button>
+          </div>
+          <ol
+            id="songs"
+            class="divide-y divide-border border-y border-border lg:max-h-[50vh] lg:overflow-y-auto"
+          ></ol>
+        </section>
+
+        <section class="space-y-2">
+          <h2 class="text-muted">export</h2>
+          <div class="flex gap-4">
+            <button type="button" id="copy" class="underline underline-offset-4 hover:opacity-70">
+              copy
+            </button>
+            <button
+              type="button"
+              id="download"
+              class="underline underline-offset-4 hover:opacity-70"
+            >
+              download .json
+            </button>
+            <button
+              type="button"
+              id="clear-all"
+              class="underline underline-offset-4 hover:opacity-70"
+            >
+              clear all
+            </button>
+          </div>
+        </section>
+      </aside>
+
+      <div class="min-w-0 space-y-10">
+        <section class="space-y-2">
+          <h2 class="text-muted">1. find song</h2>
+          <form id="search-form" class="flex gap-4 items-baseline">
+            <input
+              id="q"
+              type="search"
+              placeholder="search song, artist... (lrclib)"
+              autocomplete="off"
+              class="field flex-1"
+            />
+            <button class="underline underline-offset-4 hover:opacity-70">search</button>
+          </form>
+          <p id="search-status" class="text-muted"></p>
+          <ul id="results" class="divide-y divide-border border-y border-border" hidden></ul>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-muted">2. details</h2>
+          <div class="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+            <label class="block">
+              <span class="text-muted">name</span>
+              <input id="name" class="field" />
+            </label>
+            <label class="block">
+              <span class="text-muted">artist</span>
+              <input id="artist" class="field" />
+            </label>
+            <label class="block">
+              <span class="text-muted">album</span>
+              <input id="album" class="field" />
+            </label>
+            <label class="block">
+              <span class="text-muted">
+                youtube url
+                <button
+                  type="button"
+                  id="yt-search"
+                  class="ml-2 underline underline-offset-4 hover:opacity-70"
+                >
+                  search on youtube
+                </button>
+              </span>
+              <input id="url" class="field" placeholder="https://www.youtube.com/watch?v=..." />
+            </label>
+          </div>
+          <p id="url-status" class="text-muted"></p>
+        </section>
+
+        <section class="space-y-3">
+          <div class="flex items-baseline justify-between">
+            <h2 class="text-muted">3. pick favorite lyrics</h2>
+            <div class="flex gap-4">
+              <button
+                type="button"
+                id="edit-toggle"
+                class="underline underline-offset-4 hover:opacity-70"
+              >
+                edit text
+              </button>
+              <button
+                type="button"
+                id="add-btn"
+                class="underline underline-offset-4 hover:opacity-70"
+              >
+                add selection (ctrl+enter)
+              </button>
+            </div>
+          </div>
+          <div class="grid gap-6 md:grid-cols-2">
+            <textarea
+              id="lyrics"
+              placeholder="paste lyrics here, or search a song above"
+              class="h-[30rem] w-full bg-transparent border border-border focus:border-foreground outline-none p-2 font-serif text-base leading-normal"
+            ></textarea>
+            <div
+              id="lyrics-view"
+              tabindex="0"
+              class="h-[30rem] w-full overflow-y-auto border border-border focus:border-foreground outline-none p-2 font-serif text-base leading-normal whitespace-pre-wrap"
+              hidden
+            ></div>
+            <div class="space-y-2">
+              <h3 class="text-muted">picked (<span id="count">0</span>)</h3>
+              <ol
+                id="picks"
+                class="divide-y divide-border border-y border-border md:max-h-[32rem] md:overflow-y-auto"
+              ></ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <div class="flex items-baseline gap-4">
+            <h2 class="text-muted">4. preview</h2>
+            <button type="button" data-w="390" class="width-btn underline underline-offset-4">
+              mobile
+            </button>
+            <button type="button" data-w="820" class="width-btn underline underline-offset-4">
+              desktop
+            </button>
+          </div>
+          <div class="overflow-x-auto pb-2">
+            <div
+              id="frame"
+              class="@container mx-auto bg-background px-6 py-6 outline outline-border"
+              style="width: 820px"
+            >
+              <figure class="space-y-3">
+                <a
+                  id="pv-link"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group block w-full aspect-video overflow-hidden bg-surface-muted"
+                >
+                  <img
+                    id="pv-img"
+                    alt=""
+                    class="w-full h-full object-cover group-hover:brightness-75"
+                    referrerpolicy="no-referrer"
+                  />
+                </a>
+                <figcaption
+                  class="flex flex-col @min-[40rem]:flex-row @min-[40rem]:items-baseline justify-between gap-2 pt-1"
+                >
+                  <div>
+                    <p
+                      id="pv-title"
+                      class="font-serif italic font-semibold text-xl @min-[48rem]:text-2xl text-foreground text-left leading-normal"
+                    ></p>
+                  </div>
+                  <blockquote
+                    id="pv-quote"
+                    class="font-serif italic font-normal text-xl @min-[48rem]:text-2xl text-foreground text-right whitespace-pre-line max-w-prose leading-normal @min-[40rem]:ml-auto"
+                  ></blockquote>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <details>
+          <summary class="text-muted">output (all drafts)</summary>
+          <pre
+            id="out"
+            class="mt-2 overflow-x-auto border border-border p-3 whitespace-pre-wrap break-words"
+          ></pre>
+        </details>
+      </div>
+    </main>
+
+    <button
+      type="button"
+      id="add"
+      hidden
+      class="fixed z-10 bg-foreground text-background px-2 py-1 shadow-md"
+    >
+      + add
+    </button>
+
+    <style type="text/tailwindcss">
+      .field {
+        @apply w-full bg-transparent border-b border-border focus:border-foreground outline-none py-1 text-sm;
+      }
+      .width-btn[aria-pressed="true"] {
+        @apply font-bold;
+      }
+    </style>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const KEY = "music-add-drafts";
+      const blank = () => ({
+        name: "",
+        artist: "",
+        album: "",
+        url: "",
+        lyrics: "",
+        picks: [],
+        pv: 0,
+      });
+      let songs = [blank()];
+      let current = 0;
+      let width = "820";
+      let editing = true;
+      let savedQuery = "";
+      try {
+        const saved = JSON.parse(localStorage.getItem(KEY));
+        if (saved?.songs?.length) {
+          songs = saved.songs;
+          current = Math.min(saved.current || 0, songs.length - 1);
+        }
+        width = saved?.width === "390" ? "390" : "820";
+        savedQuery = saved?.q || "";
+      } catch {}
+
+      const save = () => {
+        try {
+          localStorage.setItem(KEY, JSON.stringify({ songs, current, width, q: $("q").value }));
+        } catch {}
+      };
+
+      const cur = () => songs[current];
+      const FIELDS = ["name", "artist", "album", "url", "lyrics"];
+      const sync = () => FIELDS.forEach((f) => (cur()[f] = $(f).value));
+      const load = () => {
+        FIELDS.forEach((f) => ($(f).value = cur()[f]));
+        editing = !cur().lyrics.trim();
+        $("add").hidden = true;
+      };
+
+      const videoId = (raw) => {
+        try {
+          const u = new URL(raw.trim());
+          if (u.hostname === "youtu.be") return u.pathname.slice(1) || "";
+          if (u.hostname.endsWith("youtube.com")) return u.searchParams.get("v") || "";
+        } catch {}
+        return "";
+      };
+
+      const entryOf = (song) => {
+        const id = videoId(song.url);
+        const e = { name: song.name.trim(), artist: song.artist.trim() };
+        const album = song.album.trim();
+        if (album) e.album = album;
+        e.favoriteLyrics = song.picks;
+        e.url = id ? `https://www.youtube.com/watch?v=${id}` : song.url.trim();
+        return e;
+      };
+
+      const drafts = () => songs.filter((x) => x.name.trim());
+
+      const button = (label, onclick, className = "hover:opacity-70") => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = label;
+        b.className = className;
+        b.onclick = onclick;
+        return b;
+      };
+
+      const applyMode = () => {
+        $("lyrics").hidden = !editing;
+        $("lyrics-view").hidden = editing;
+        $("edit-toggle").textContent = editing ? "done editing" : "edit text";
+      };
+
+      const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+      const renderView = (song) => {
+        const picks = song.picks.filter(Boolean).sort((a, b) => b.length - a.length);
+        const parts = picks.length
+          ? song.lyrics.split(new RegExp(`(${picks.map(esc).join("|")})`))
+          : [song.lyrics];
+        $("lyrics-view").replaceChildren(
+          ...parts.map((t, i) =>
+            i % 2 ? Object.assign(document.createElement("strong"), { textContent: t }) : t
+          )
+        );
+      };
+
+      const selectedText = () => {
+        if (editing) {
+          const t = $("lyrics");
+          return t.value.slice(t.selectionStart, t.selectionEnd).trim();
+        }
+        const sel = getSelection();
+        const v = $("lyrics-view");
+        return sel.rangeCount && v.contains(sel.anchorNode) && v.contains(sel.focusNode)
+          ? sel.toString().trim()
+          : "";
+      };
+
+      const select = (i) => {
+        sync();
+        current = i;
+        load();
+        render();
+      };
+
+      const removeSong = (i) => {
+        const x = songs[i];
+        if ((x.name || x.lyrics || x.picks.length) && !confirm(`delete "${x.name || "untitled"}"?`))
+          return;
+        songs.splice(i, 1);
+        if (!songs.length) songs.push(blank());
+        if (i < current) current--;
+        current = Math.min(current, songs.length - 1);
+        load();
+        render();
+      };
+
+      const render = () => {
+        sync();
+        const song = cur();
+        const id = videoId(song.url);
+        $("url-status").textContent = !song.url.trim()
+          ? ""
+          : id
+            ? `video id: ${id}`
+            : "no video id found. expected youtube.com/watch?v=... or youtu.be/...";
+
+        $("song-count").textContent = songs.length;
+        $("songs").replaceChildren(
+          ...songs.map((x, i) => {
+            const li = document.createElement("li");
+            li.className = "flex gap-3 items-start py-2";
+            li.append(
+              button(
+                `${x.name.trim() ? `${x.name.trim()} — ${x.artist.trim()}` : "(untitled)"} · ${x.picks.length} lyrics`,
+                () => select(i),
+                `flex-1 text-left hover:opacity-70 ${i === current ? "font-bold" : ""}`
+              ),
+              button("✕", () => removeSong(i))
+            );
+            return li;
+          })
+        );
+
+        if (!song.lyrics.trim()) editing = true;
+        applyMode();
+        renderView(song);
+
+        $("count").textContent = song.picks.length;
+        $("picks").replaceChildren(
+          ...song.picks.map((text, i) => {
+            const li = document.createElement("li");
+            li.className = "flex gap-3 items-start py-2";
+            li.append(
+              button(
+                text,
+                () => {
+                  song.pv = i;
+                  render();
+                },
+                `flex-1 text-left whitespace-pre-line font-serif text-base leading-normal ${i === song.pv ? "font-semibold" : ""}`
+              ),
+              button("↑", () => i > 0 && move(i, i - 1)),
+              button("↓", () => i < song.picks.length - 1 && move(i, i + 1)),
+              button("✕", () => remove(i))
+            );
+            return li;
+          })
+        );
+
+        song.pv = Math.min(song.pv, Math.max(song.picks.length - 1, 0));
+        const quote = song.picks[song.pv] || "";
+        $("pv-title").textContent = song.name.trim() || "song name";
+        $("pv-quote").textContent = quote ? `“${quote}”` : "";
+        const img = $("pv-img");
+        if (img.dataset.id !== id) {
+          img.dataset.id = id;
+          if (id) {
+            img.onerror = () => {
+              img.onerror = null;
+              img.src = `https://i3.ytimg.com/vi/${id}/hqdefault.jpg`;
+            };
+            img.src = `https://i3.ytimg.com/vi/${id}/maxresdefault.jpg`;
+          } else {
+            img.removeAttribute("src");
+          }
+        }
+        if (id) $("pv-link").href = entryOf(song).url;
+        else $("pv-link").removeAttribute("href");
+
+        const ready = drafts();
+        $("out").textContent = ready.length
+          ? ready
+              .map((x) =>
+                JSON.stringify(entryOf(x), null, 2)
+                  .split("\n")
+                  .map((l) => "  " + l)
+                  .join("\n")
+              )
+              .join(",\n") + ","
+          : "";
+        save();
+      };
+
+      const move = (from, to) => {
+        const p = cur().picks;
+        p.splice(to, 0, p.splice(from, 1)[0]);
+        cur().pv = to;
+        render();
+      };
+      const remove = (i) => {
+        cur().picks.splice(i, 1);
+        render();
+      };
+
+      const addSelection = () => {
+        const text = selectedText();
+        if (!text) return;
+        cur().picks.push(text);
+        cur().pv = cur().picks.length - 1;
+        if (editing) {
+          const t = $("lyrics");
+          t.setSelectionRange(t.selectionEnd, t.selectionEnd);
+        } else {
+          getSelection().removeAllRanges();
+        }
+        $("add").hidden = true;
+        render();
+      };
+
+      $("add").onclick = addSelection;
+      $("add-btn").onclick = addSelection;
+      $("edit-toggle").onclick = () => {
+        editing = !editing;
+        $("add").hidden = true;
+        render();
+      };
+
+      const showTip = (e) => {
+        const tip = $("add");
+        if (!selectedText()) {
+          tip.hidden = true;
+          return;
+        }
+        tip.hidden = false;
+        tip.style.left = `${Math.min(Math.max(e.clientX - tip.offsetWidth / 2, 4), innerWidth - tip.offsetWidth - 4)}px`;
+        tip.style.top = `${Math.max(e.clientY - 40, 4)}px`;
+      };
+      const hideTip = () => ($("add").hidden = true);
+      ["add", "add-btn"].forEach((id) =>
+        $(id).addEventListener("mousedown", (e) => e.preventDefault())
+      );
+      ["lyrics", "lyrics-view"].forEach((id) => {
+        $(id).addEventListener("mouseup", showTip);
+        $(id).addEventListener("scroll", hideTip);
+      });
+      $("lyrics").addEventListener("blur", hideTip);
+      addEventListener("scroll", hideTip, { passive: true });
+      document.addEventListener("selectionchange", () => {
+        if (!selectedText()) hideTip();
+      });
+
+      let searchTimer;
+      let searchCtl;
+      let lastQuery = "";
+      let blockedUntil = 0;
+
+      const runSearch = async () => {
+        const q = $("q").value.trim();
+        if (q.length < 2) {
+          searchCtl?.abort();
+          lastQuery = "";
+          $("search-status").textContent = "";
+          $("results").hidden = true;
+          return;
+        }
+        if (q === lastQuery) return;
+        const remaining = Math.ceil((blockedUntil - Date.now()) / 1000);
+        if (remaining > 0) {
+          $("search-status").textContent = `rate limited. retry in ${remaining}s.`;
+          return;
+        }
+        lastQuery = q;
+        searchCtl?.abort();
+        searchCtl = new AbortController();
+        $("search-status").textContent = "searching...";
+        try {
+          const res = await fetch(`https://lrclib.net/api/search?q=${encodeURIComponent(q)}`, {
+            signal: searchCtl.signal,
+            headers: {
+              "Lrclib-Client":
+                "chawinkn-music-add (https://github.com/chawinkn/chawinkn.github.io)",
+            },
+          });
+          if (res.status === 429) {
+            const wait = parseInt(res.headers.get("Retry-After"), 10) || 10;
+            blockedUntil = Date.now() + wait * 1000;
+            lastQuery = "";
+            $("search-status").textContent = `rate limited. retrying in ${wait}s.`;
+            searchTimer = setTimeout(runSearch, wait * 1000);
+            return;
+          }
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          $("search-status").textContent = data.length
+            ? ""
+            : "no results. fill fields and paste lyrics by hand.";
+          $("results").hidden = !data.length;
+          $("results").replaceChildren(
+            ...data.slice(0, 15).map((r) => {
+              const li = document.createElement("li");
+              const mins = Math.floor(r.duration / 60);
+              const secs = String(Math.round(r.duration % 60)).padStart(2, "0");
+              const b = button(
+                `${r.trackName} — ${r.artistName}${r.albumName ? ` (${r.albumName})` : ""} ${mins}:${secs}${r.plainLyrics ? "" : " [no lyrics]"}`,
+                null,
+                "w-full text-left py-2 hover:opacity-70"
+              );
+              b.onclick = () => {
+                $("name").value = r.trackName || "";
+                $("artist").value = r.artistName || "";
+                $("album").value = r.albumName || "";
+                $("lyrics").value = (r.plainLyrics || "").replace(/\r\n/g, "\n");
+                cur().picks = [];
+                cur().pv = 0;
+                editing = false;
+                $("results").hidden = true;
+                render();
+              };
+              li.append(b);
+              return li;
+            })
+          );
+        } catch (err) {
+          if (err.name === "AbortError") return;
+          lastQuery = "";
+          $("search-status").textContent = `search failed: ${err.message}`;
+        }
+      };
+
+      $("q").addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(runSearch, 400);
+        save();
+      });
+
+      $("search-form").onsubmit = (e) => {
+        e.preventDefault();
+        clearTimeout(searchTimer);
+        runSearch();
+      };
+
+      $("yt-search").onclick = () => {
+        const q = `${$("artist").value} ${$("name").value}`.trim();
+        window.open(
+          `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,
+          "_blank",
+          "noopener"
+        );
+      };
+
+      const setWidth = (w) => {
+        width = w;
+        $("frame").style.width = `${w}px`;
+        document
+          .querySelectorAll(".width-btn")
+          .forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.w === w)));
+        save();
+      };
+      document.querySelectorAll(".width-btn").forEach((b) => {
+        b.onclick = () => setWidth(b.dataset.w);
+      });
+
+      $("copy").onclick = async () => {
+        await navigator.clipboard.writeText($("out").textContent);
+        $("copy").textContent = "copied";
+        setTimeout(() => ($("copy").textContent = "copy"), 1200);
+      };
+
+      $("download").onclick = () => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(
+          new Blob([JSON.stringify(drafts().map(entryOf), null, 2)], { type: "application/json" })
+        );
+        a.download = "music-drafts.json";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      };
+
+      FIELDS.forEach((f) => $(f).addEventListener("input", render));
+      ["lyrics", "lyrics-view"].forEach((id) =>
+        $(id).addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            addSelection();
+          }
+        })
+      );
+
+      const resetSearch = () => {
+        $("q").value = "";
+        lastQuery = "";
+        $("results").hidden = true;
+        $("search-status").textContent = "";
+      };
+
+      $("new-song").onclick = () => {
+        sync();
+        songs.push(blank());
+        current = songs.length - 1;
+        load();
+        resetSearch();
+        render();
+        $("q").focus();
+      };
+
+      $("clear-all").onclick = () => {
+        if (drafts().length && !confirm(`delete all ${songs.length} drafts?`)) return;
+        songs = [blank()];
+        current = 0;
+        load();
+        resetSearch();
+        render();
+      };
+
+      $("q").value = savedQuery;
+      setWidth(width);
+      load();
+      render();
+    </script>
+  </body>
+</html>
