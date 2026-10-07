@@ -68,4 +68,4 @@ Open `public/music-add.html` (served at `/music-add.html`, `noindex`) to pick ly
 
 ## Deployment
 
-`.github/workflows/astro.yml` builds with Bun and deploys to GitHub Pages on push to `main`, on manual dispatch, and daily at 00:10 Bangkok time so the weekly photos stay fresh.
+`.github/workflows/astro.yml` builds with Bun and deploys to GitHub Pages on push to `main`, on manual dispatch, and weekly on Monday at 00:10 Bangkok time so the weekly photos stay fresh.
